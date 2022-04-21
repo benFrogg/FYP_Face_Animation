@@ -26,7 +26,9 @@ async def get_user_by_email(email: str, db: _orm.Session):
     return db.query(_model.User).filter(_model.User.email == email).first()
 
 async def create_user(user: _schemas.UserCreate, db: _orm.Session):
-    user_obj = _model.User(email=user.email, hashed_password=_hash.bcrypt.hash(user.hashed_password))
+    user_obj = _model.User(
+        email=user.email, hashed_password=_hash.bcrypt.hash(user.hash_password)
+    )
     
     db.add(user_obj)
     db.commit()
@@ -50,18 +52,13 @@ def token_response(token: str):
         "access_token": token
     }
 
-async def create_token(user: _model.User) -> dict[str, str]:
+async def create_token(user: _model.User):
     user_obj = _schemas.User.from_orm(user)
 
-    payload = {
-        "user_id": user_obj,
-        "expiry": time.time() + 600
-    }
 
-    token = _jwt.encode(payload, jwtSecret)
+    token = _jwt.encode(user_obj.dict(), jwtSecret)
 
-    # return dict(access_token=token, token_type="bearer")
-    return token_response(token)
+    return dict(access_token=token, token_type="bearer")
 
 async def get_current_user(db: _orm.Session = _fastapi.Depends(get_db), token: str = _fastapi.Depends(oauth2schema)):
     try:
