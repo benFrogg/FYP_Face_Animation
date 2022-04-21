@@ -1,0 +1,6 @@
+fastapi==0.45.0
+hypercorn== 0.13.2
+pysqlite3==0.4.7
+SQLAlchemy==1.4.35
+passlib==1.7.4
+pyjwt==2.3.0
