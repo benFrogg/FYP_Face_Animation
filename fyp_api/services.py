@@ -1,4 +1,4 @@
-import database as _database, model as _model, schemas as _schemas
+import database as _database, models as _model, schemas as _schemas
 import sqlalchemy.orm as _orm
 import passlib.hash as _hash
 import jwt as _jwt
@@ -79,5 +79,4 @@ async def get_current_user(db: _orm.Session = _fastapi.Depends(get_db), token: s
 def uploaded_image(imagename, data):
     with open(imagename, 'wb') as i:
         i.write(data)
-        print(data)
         
