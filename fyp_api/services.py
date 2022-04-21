@@ -4,7 +4,6 @@ import passlib.hash as _hash
 import jwt as _jwt
 import fastapi as _fastapi
 import fastapi.security as _security
-import os as _os
 import time
 
 jwtSecret = "FMsecret"
@@ -73,7 +72,12 @@ async def get_current_user(db: _orm.Session = _fastapi.Depends(get_db), token: s
     
     return _os(directory_name)'''
 
+
 def uploaded_image(imagename, data):
     with open(imagename, 'wb') as i:
         i.write(data)
-        
+
+
+
+
+
