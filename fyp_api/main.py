@@ -147,12 +147,12 @@ async def get_user(user: _schemas.User=_fastapi.Depends(_services.get_current_us
     return user
 
 @app.post("/get-image")
-async def get_image(file: UploadFile = File(...)):
+async def get_image(feature_id: int, file: UploadFile = File(...)):
     '''with open(f'{file.filename}', "wb") as image:
         _shutil.copyfileobj(file.file, image)
 
     return {"image_name" : file.filename}'''
     image = await file.read()
-    _services.uploaded_image(file.filename, image)
+    _services.uploaded_image("Mover/upload_img/input/A/" + file.filename, image)
 
-    return {"image_name" : file.filename}
+    return {"image_name" : file.filename, "features_id": feature_id}
