@@ -156,3 +156,19 @@ async def get_image(feature_id: int, file: UploadFile = File(...)):
     _services.uploaded_image("Mover/upload_img/input/A/" + file.filename, image)
 
     return {"image_name" : file.filename, "features_id": feature_id}
+
+@app.get("/output-image")
+async def get_output():
+    for file in os.listdir("Mover/list/output"):
+        if file.endswith("gif"):
+            with open(f"Mover/list/output/{file}", "rb") as img_gif:
+                output = img_gif.read()
+            output_io = io.BytesIO(output)
+            output_io.seek(0)
+            return StreamingResponse(content=output_io, media_type="image/gif")
+        if file.endswith("mp4"):
+            def iterfile():
+                with open(f"Mover/list/output/{file}", "rb") as vid_mp4:
+                    yield from vid_mp4
+            return StreamingResponse(iterfile(), media_type="video/mp4")
+    return None
