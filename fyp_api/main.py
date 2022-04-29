@@ -154,7 +154,12 @@ async def get_image(feature_id: int, file: UploadFile = File(...)):
     return {"image_name" : file.filename}'''
     image = await file.read()
     _services.uploaded_image("Mover/upload_img/input/A/" + file.filename, image)
-
+    
+    import subprocess
+    os.chdir("Mover")
+    subprocess.call(['python', 'switch.py', '--mode', str(feature_id)])
+    os.chdir("..")
+    
     return {"image_name" : file.filename, "features_id": feature_id}
 
 @app.get("/output-image")
